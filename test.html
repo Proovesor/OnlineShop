@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Test</title>
+</head>
+<body>
+    <ul id="list">
+
+    </ul>
+    <button id="btn">Add</button>
+
+    <script>
+        class AddName {
+            constructor(name) {
+                const el = document.createElement('li');
+                el.textContent = name;
+                const list = document.getElementById('list');
+                list.appendChild(el);
+            }
+        }
+
+        class Generator {
+            constructor() {
+                const btn = document.getElementById('btn');
+                this.names = ["george", 'georgia', 'katherin'];
+                this.counter = 0;
+                btn.addEventListener('click', this.addName.bind(this));
+            }
+
+            addName() {
+                console.log(this);
+                const name = new AddName(this.names[this.counter]);
+                this.counter++;
+
+                if(this.counter >= this.names.length) {
+                    this.counter = 0;
+                }
+            }
+        }
+
+        const generate = new Generator();
+    </script>
+    
+</body>
+</html>

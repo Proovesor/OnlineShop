@@ -1,0 +1,53 @@
+.form-control label,
+.form-control input,
+.form-control textarea {
+    display: block;
+    width: 100%;
+}
+
+.form-control {
+    margin: .5rem 0;
+}
+
+.product-form {
+    width: 25rem;
+    max-width: 90%;
+
+    margin: auto;
+}
+
+.form-control input,
+.form-control textarea {
+    border: 1px solid #414141;
+    border-radius: 2px;
+
+    font: inherit;
+}
+
+.form-control input:focus,
+.form-control textarea:focus {
+    outline-color: #ce4f4f;
+}
+
+#description {
+    height: 5rem;
+}
+
+button {
+    font:inherit;
+    padding: 3px;
+    margin: 1rem 0;
+    border: 1px solid #4d068f;
+    border-radius: 5px;
+
+    color: #4d068f;
+}
+
+button:hover,
+button:active {
+    cursor: pointer;
+    background-color: #4d068f;
+    color: white;
+
+    border-radius: 5px;
+}
