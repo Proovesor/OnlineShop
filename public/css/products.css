@@ -11,6 +11,7 @@
 .card {
     width: 300px;
     margin: 30px 0;
+    height: 100%; 
 
     border-radius: 3px;
     /* display: inline-block; */
@@ -30,21 +31,21 @@
     text-align: center;
 }
 
-.btn {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 20px;
-    background-color: rgb(70, 207, 219);
-    border-radius: 8px;
 
-    margin-bottom: 10px;
-    
-    filter: brightness(85%);
+
+.card__actions a,
+.card__actions a:active,
+.card__actions a:visited {
+    text-decoration: none;
+    color: black;
 }
 
-.btn:hover,
-.btn:active {
-    cursor: pointer;
-    filter: brightness(100%);
-
-    transition: all 150ms ease-in-out;
+.card__actions a,
+.card__actions button {
+    margin: 0 1rem;
 }
+
+.card__actions {
+    margin: 1rem 0;
+}
+

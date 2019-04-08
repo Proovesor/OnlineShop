@@ -26,7 +26,8 @@ module.exports = class Products {
     }
 
     save() {
-       fetchDataFromFile(products => {
+        this.id = Math.random();
+        fetchDataFromFile(products => {
             products.push(this);
             //it's important to use arrow function
             //otherwise 'this' would lose its context in this example
@@ -39,5 +40,12 @@ module.exports = class Products {
     
     static getProducts(callback) {
         fetchDataFromFile(callback);
+    }
+
+    static fetchWithId(id, callback) {
+        fetchDataFromFile(products => {
+            const product = products.find(e => e.id == id);
+            callback(product);
+        })
     }
 }

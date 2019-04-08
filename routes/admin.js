@@ -13,6 +13,8 @@ router.get('/add-product', adminContr.getAddProd)
 // /admin/add-product => POST
 router.post('/add-product', adminContr.postAddProd)
 
+router.get('/edit-product/:productId', adminContr.getEditProd)
+
 router.get('/products', adminContr.getProducts)
 
 module.exports = router;

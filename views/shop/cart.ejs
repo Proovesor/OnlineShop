@@ -3,6 +3,14 @@
 <body>
     <%- include('../sharedFiles/navigation.ejs') %>
     <div align="center">
-        <h1>Card page on its way...</h1>
+        <% if(prodArray) { %>
+        <h1>Items:</h1>
+        <% prodArray.forEach(element => { %>
+            <p><%= element.title %>: <%= element.quantity %>x</p>
+        <% }) %>
+        <p><span style="font-size: 20px">Total price:</span> $<%= price %></p>
+        <% } else { %>
+        <h1>No products in cart yet!</h1>
+        <% } %>
     </div>
 <%- include('../sharedFiles/end.ejs') %>

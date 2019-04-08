@@ -13,20 +13,23 @@
                             <h1 class="product-name"><%= element.title %></h1>
                         </header>
                         <div class="card__image" align="center">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/37/Empty_book.jpg" alt="A Book">
+                            <img src="<%= element.imageURL %>" alt="<%= element.title %>">
                         </div>
                         <div class="card__content">
-                            <h2 class="product__price">$50</h2>
-                            <p class="product__desc">Certainly a book you'd like to explore.</p>
+                            <h2 class="product__price">$<%= element.price %></h2>
+                            <p class="product__desc"><%= element.description %></p>
                         </div>
                         <div class="card__actions" align="center">
-                            <button class="btn">Add to card</button>
+                            <form action="/cart" method="POST">
+                                <button class="btn" type="submit">Add to cart</button>
+                                <input type="hidden" name="productId" value="<%= element.id %>">
+                            </form>
                         </div>
                     </article>
                 <% }) %>
             </div>
         <% } else { %>
-            <h3>No products yet.</h3>
+            <h1>No products yet!</h1>
         <% } %>
     </main>
 <%- include('../sharedFiles/end.ejs') %>

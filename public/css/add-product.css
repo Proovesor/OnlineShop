@@ -20,6 +20,7 @@
 .form-control textarea {
     border: 1px solid #414141;
     border-radius: 2px;
+    padding: 5px;
 
     font: inherit;
 }

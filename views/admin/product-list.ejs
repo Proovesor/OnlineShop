@@ -1,0 +1,35 @@
+<%- include('../sharedFiles/head.ejs') %>
+    <link rel="stylesheet" href="/css/products.css"></link>
+</head>
+<body> 
+    <%- include('../sharedFiles/navigation.ejs') %>
+
+    <main>
+        <% if(hasProds) { %>
+            <div class="container">
+                <% prods.forEach(element => { %>
+                    <article class="card product-element">
+                        <header class="card-header" align="center">
+                            <h1 class="product-name"><%= element.title %></h1>
+                        </header>
+                        <div class="card__image" align="center">
+                            <img src="<%= element.imageURL %>" alt="<%= element.title %>">
+                        </div>
+                        <div class="card__content">
+                            <h2 class="product__price">$<%= element.price %></h2>
+                            <p class="product__desc"><%= element.description %></p>
+                        </div>
+                        <div class="card__actions" align="center">
+                            <a href="/admin/edit-product/<%= element.id %>?edit=true" class="btn">Edit</a>
+                            <form action="/admin/delete-product" method="POST" style="display: inline-block">
+                                <button class="btn" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </article>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <h1>No products yet!</h1>
+        <% } %>
+    </main>
+<%- include('../sharedFiles/end.ejs') %>
