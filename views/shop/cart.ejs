@@ -6,11 +6,15 @@
         <% if(prodArray) { %>
         <h1>Items:</h1>
         <% prodArray.forEach(element => { %>
-            <p><%= element.title %>: <%= element.quantity %>x</p>
+            <p style="font-size: 25px; margin-bottom: 6px"><%= element.title %>: <%= element.quantity %>x</p>
+            <form action="/delete-cart-product" method="POST" style="margin-top: 0; margin-left: 0">
+                <input type="hidden" name="productId" value="<%= element.id %>">
+                <button type="submit" class="btn">Delete</button>
+            </form>
         <% }) %>
-        <p><span style="font-size: 20px">Total price:</span> $<%= price %></p>
+        <p style="font-size: 40px">Total price: $<%= price %></p>
         <% } else { %>
-        <h1>No products in cart yet!</h1>
+        <h1>Let's start shopping!</h1>
         <% } %>
     </div>
 <%- include('../sharedFiles/end.ejs') %>

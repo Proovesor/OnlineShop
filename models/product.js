@@ -7,6 +7,11 @@ const p = path.join(
     'products.json'
 );
 
+const pCart = path.join(
+    path.dirname(process.mainModule.filename),
+    'data',
+    'cart.json'
+);
 
 const fetchDataFromFile = callback => {
     fs.readFile(p, (err, data) => {
@@ -17,8 +22,18 @@ const fetchDataFromFile = callback => {
     })
 }
 
+const fetchDataFromCart = callback => {
+    fs.readFile(pCart, (err, data) => {
+        if(err) {
+            return callback([]);
+        }
+        callback(JSON.parse(data));
+    })
+}
+
 module.exports = class Products {
-    constructor(title, imageURL, description, price) {
+    constructor(id, title, imageURL, description, price) {
+        this.id = id;
         this.title = title;
         this.imageURL = imageURL;
         this.description = description;
@@ -26,15 +41,43 @@ module.exports = class Products {
     }
 
     save() {
-        this.id = Math.random();
         fetchDataFromFile(products => {
-            products.push(this);
-            //it's important to use arrow function
-            //otherwise 'this' would lose its context in this example
-            //now 'this' reffers to the class
-            fs.writeFile(p, JSON.stringify(products), err => { //stringify takes JS object, array etc., and converts it ino JSON
-                console.log(err);
-            })
+            if(this.id) {
+                const existingProductIndex = products.findIndex(prod => prod.id == this.id);
+                const updatedProducts = [...products];
+                updatedProducts[existingProductIndex] = this;
+
+                fs.writeFile(p, JSON.stringify(updatedProducts), err => {
+                    console.log(err);
+                })
+
+                if(products[existingProductIndex].price != this.price) {
+                    fetchDataFromCart(object => {
+                        if(object.products.find(prod => prod.id == this.id)) {
+                            const existProdIndex = object.products.findIndex(prod => prod.id == this.id);
+                            const newCartProds = { ...object };
+                            let currentQuantity = newCartProds.products[existProdIndex].quantity;
+                            let oldPrice = products[existingProductIndex].price;
+                            newCartProds.totalPrice = newCartProds.totalPrice - (currentQuantity * oldPrice) + (currentQuantity * this.price);
+
+                            fs.writeFile(pCart, JSON.stringify(newCartProds), err => {
+                                console.log(err);
+                            })
+                        }
+                       
+                    })
+                }
+                
+
+            } else {
+                this.id = Math.random();
+                products.push(this);
+        
+                fs.writeFile(p, JSON.stringify(products), err => { 
+                    console.log(err);
+                })
+            }
+            
         })
     }
     
@@ -46,6 +89,40 @@ module.exports = class Products {
         fetchDataFromFile(products => {
             const product = products.find(e => e.id == id);
             callback(product);
+        })
+    }
+
+    static deleteProduct(id, itemPrice) {
+        fetchDataFromFile(products => {
+            const deleteId = products.findIndex(e => e.id == id);
+            let updatedProducts = [...products];
+            updatedProducts.splice(deleteId, 1);
+
+            fs.writeFile(p, JSON.stringify(updatedProducts), err => {
+                if(!err) {
+                    fetchDataFromCart(object => {
+                        const newCartProds = { ...object };
+                        if(newCartProds.products) {
+                            const deletedProduct = newCartProds.products.filter(e => e.id === id);
+
+                            if(deletedProduct[0]) {
+                                const decreasedPrice = deletedProduct[0].quantity * itemPrice;
+                                newCartProds.totalPrice -= decreasedPrice;
+                            }
+                        
+                            let newProdsArr = newCartProds.products.filter(e => e.id !== id);
+                            
+                            newCartProds.products = newProdsArr;
+                            
+                            fs.writeFile(pCart, JSON.stringify(newCartProds), err =>
+                                console.log(err));
+                        }    
+                    })
+                }
+                else {
+                    console.log(err);
+                }
+            })
         })
     }
 }

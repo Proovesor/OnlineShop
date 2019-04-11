@@ -30,6 +30,18 @@ main {
     margin: 0;
     padding: 0;
     display: flex;
+
+    position: relative;
+}
+
+.main-header__list img {
+  height: 1.3rem;
+  width: 1.3rem;
+  padding: 0;
+  bottom: .6rem;
+  margin-left: 2rem;
+
+  position: absolute;
 }
 
 .main-header__item {
@@ -45,7 +57,7 @@ main {
 .main-header__item a:active,
 .main-header__item a.active {
     cursor: pointer;
-    color: #4d068f;
+    color: #ffffff;
 }
 
 .btn {
@@ -76,79 +88,27 @@ a:visited {
     color: black;
 }
 
-/* .mobile-nav {
-    width: 30rem;
-    height: 100vh;
-    max-width: 90%;
-    position: fixed;
-    left: 0;
-    top: 0;
-    background: white;
-    z-index: 10;
-    padding: 2rem 1rem 1rem 2rem;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease-out;
-  }
-  
-  .mobile-nav.open {
-    transform: translateX(0);
-  }
-  
-  .mobile-nav__item-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .mobile-nav__item {
-    margin: 1rem;
-    padding: 0;
-  }
-  
-  .mobile-nav__item a {
-    text-decoration: none;
-    color: black;
-    font-size: 1.5rem;
-    padding: 0.5rem 2rem;
-  }
-  
-  .mobile-nav__item a:active,
-  .mobile-nav__item a:hover,
-  .mobile-nav__item a.active {
-    background: #00695c;
-    color: white;
-    border-radius: 3px;
-  }
-  
-  #side-menu-toggle {
-    border: 1px solid white;
-    font: inherit;
-    padding: 0.5rem;
-    display: block;
-    background: transparent;
-    color: white;
-    cursor: pointer;
-  }
-  
-  #side-menu-toggle:focus {
-    outline: none;
-  }
-  
-  #side-menu-toggle:active,
-  #side-menu-toggle:hover {
-    color: #ffeb3b;
-    border-color: #ffeb3b;
-  }
-  
-  .backdrop {
-    position: fixed;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 5;
-    display: none;
-  } */
+#cart:hover img {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97);
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px
+}
 
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(1.5px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-3px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(3px, 0, 0);
+  }
+}

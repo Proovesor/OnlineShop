@@ -3,7 +3,6 @@
 </head>
 <body> 
     <%- include('../sharedFiles/navigation.ejs') %>
-
     <main>
         <% if(hasProds) { %>
             <div class="container">
@@ -23,6 +22,8 @@
                             <a href="/admin/edit-product/<%= element.id %>?edit=true" class="btn">Edit</a>
                             <form action="/admin/delete-product" method="POST" style="display: inline-block">
                                 <button class="btn" type="submit">Delete</button>
+                                <input type="hidden" name="productId" value="<%= element.id %>">
+                                <input type="hidden" name="productPrice" value="<%= element.price %>">
                             </form>
                         </div>
                     </article>

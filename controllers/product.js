@@ -6,8 +6,6 @@ exports.getAddProd = (req, res, next) => {
         path: '/admin/add-product',
         editing: false
     });
-    //RENDER method will always look for registered ENGINE
-    //it is defined in app.js
 }
 
 exports.postAddProd = (req, res, next) => {
@@ -15,7 +13,7 @@ exports.postAddProd = (req, res, next) => {
     const description = req.body.description;
     const imageURL = req.body.imageURL;
     const price = req.body.price;
-    product = new Product(title, imageURL, description, price);
+    product = new Product(null, title, imageURL, description, price);
     product.save();
     res.redirect('/products');
 }
@@ -37,9 +35,17 @@ exports.getEditProd = (req, res, next) => {
             prod: product
         });
     })
-    
-    //RENDER method will always look for registered ENGINE
-    //it is defined in app.js
+}
+
+exports.postEditProd = (req, res, next) => {
+    const title = req.body.title;
+    const description = req.body.description;
+    const imageURL = req.body.imageURL;
+    const price = req.body.price;
+    const prodId = req.body.productId;
+    product = new Product(prodId, title, imageURL, description, price);
+    product.save();
+    res.redirect('/products');
 }
 
 exports.getProducts = (req, res, next) => {
@@ -51,6 +57,13 @@ exports.getProducts = (req, res, next) => {
             hasProds: products.length > 0,
         });
     }); 
+}
+
+exports.postDeleteProd = (req, res, next) => {
+    const prodId = req.body.productId;
+    const price = req.body.productPrice;
+    Product.deleteProduct(prodId, price);
+    res.redirect('/products');
 }
 
 

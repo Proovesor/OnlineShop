@@ -21,9 +21,11 @@
             </div>
             <div class="form-control">
                 <label for="description">Description</label>
-                <textarea name="description" id="description" value="<% if(editing) { %><%= prod.description %><% } %>"></textarea>
+                <textarea name="description" id="description"><% if(editing) { %><%= prod.description %><% } %></textarea>
             </div>
-
+            <% if(editing) { %>
+            <input type="hidden" name="productId" value="<%= prod.id %>">
+            <% } %>
             <button type="submit"><% if(!editing) { %>Add product<% } else { %>Edit<% } %></button>
         </form>
     </main>
