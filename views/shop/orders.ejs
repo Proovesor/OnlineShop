@@ -2,7 +2,20 @@
 </head>
 <body>
     <%- include('../sharedFiles/navigation.ejs') %>
-    <div align="center">
-        <h1>Orders page on its way...</h1>
+    <div>
+        <% if(hasOrders) { %>
+            <ul>
+                <% orders.forEach(order => { %>
+                <h1>#<%= order.id %></h1>
+                <ul>
+                    <% order.products.forEach(element => { %>
+                        <li>Product: <%= element.title %>, quantity: <%= element.orderItem.quantity %></li>
+                    <% }) %>
+                </ul>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p align="center">No orders yet!</p>
+        <% } %>
     </div>
 <%- include('../sharedFiles/end.ejs') %>
