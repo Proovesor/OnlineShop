@@ -80,6 +80,7 @@ exports.postEditProd = (req, res, next) => {
 exports.getProducts = (req, res, next) => {
     req.user.getProducts()
         .then(products => {
+            console.log(products[0]);
             res.render('admin/product-list', {
                 pageName: 'Admin prods',
                 prods: products,

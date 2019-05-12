@@ -2,7 +2,6 @@ const Product = require('../models/product');
 const User = require('../models/user');
 const Cart = require('../models/cart');
 
-
 exports.getIndex = (req, res, next) => {
     Product
         .findAll()
@@ -109,7 +108,7 @@ exports.postDeleteCartProd = (req, res, next) => {
         .then(() => {
             res.redirect('/cart');
         })
-        .catch(err => console.log)
+        .catch(err => console.log(err))
 }
 
 exports.postOrder = (req, res, next) => {
@@ -126,7 +125,6 @@ exports.postOrder = (req, res, next) => {
                 .then(order => {
                     return order.addProducts(products.map(product => {
                         product.orderItem = { quantity: product.cartItem.quantity };
-                        orderProds.push(product);
                         return product;
                     }))
                 })
