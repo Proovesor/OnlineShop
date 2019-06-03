@@ -1,3 +1,5 @@
+require('dotenv').config({ path: '.env' });
+
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -20,7 +22,7 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
@@ -54,7 +56,7 @@ sequelize
         return User.findByPk(1);
     })
     .then(user => {
-        if(!user) {
+        if (!user) {
             return User.create({
                 name: 'Franchesco',
                 email: 'franchesco@gmail.com'
