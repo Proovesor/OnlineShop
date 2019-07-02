@@ -1,12 +1,18 @@
 <%- include('../sharedFiles/head.ejs') %>
-    <link rel="stylesheet" href="/css/add-product.css"></link>
-    
+<link rel="stylesheet" href="/css/add-product.css">
+</link>
+<link rel="stylesheet" href="/css/forms.css">
+</link>
+
 </head>
+
 <body>
     <%- include('../sharedFiles/navigation.ejs') %>
 
     <main>
-        <form class="product-form" action="/admin/<% if(!editing) { %>add-product<% } else { %>edit-product<% } %>" method="POST">
+        <form class="product-form" action="/admin/<% if(!editing) { %>add-product<% } else { %>edit-product<% } %>"
+            method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <div class="form-control">
                 <label for="title">Title</label>
                 <input type="text" name="title" id="title" value="<% if(editing) { %><%= prod.title %><% } %>">
@@ -17,16 +23,18 @@
             </div>
             <div class="form-control">
                 <label for="price">Price</label>
-                <input type="number" name="price" id="price" step="0.01" value="<% if(editing) { %><%= prod.price %><% } %>">
+                <input type="number" name="price" id="price" step="0.01"
+                    value="<% if(editing) { %><%= prod.price %><% } %>">
             </div>
             <div class="form-control">
                 <label for="description">Description</label>
-                <textarea name="description" id="description"><% if(editing) { %><%= prod.description %><% } %></textarea>
+                <textarea name="description"
+                    id="description"><% if(editing) { %><%= prod.description %><% } %></textarea>
             </div>
             <% if(editing) { %>
             <input type="hidden" name="productId" value="<%= prod.id %>">
             <% } %>
-            <button type="submit"><% if(!editing) { %>Add product<% } else { %>Edit<% } %></button>
+            <button class="btn" type="submit"><% if(!editing) { %>Add product<% } else { %>Edit<% } %></button>
         </form>
     </main>
-<%- include('../sharedFiles/end.ejs') %>
+    <%- include('../sharedFiles/end.ejs') %>

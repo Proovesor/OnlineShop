@@ -1,35 +1,42 @@
 <%- include('../sharedFiles/head.ejs') %>
-    <link rel="stylesheet" href="/css/products.css"></link>
+<link rel="stylesheet" href="/css/products.css">
+</link>
+<link rel="stylesheet" href="/css/main.css">
+</link>
 </head>
-<body> 
+
+<body>
     <%- include('../sharedFiles/navigation.ejs') %>
 
     <main>
         <% if(hasProds) { %>
-            <div class="container">
-                <% prods.forEach(element => { %>
-                    <article class="card product-element">
-                        <header class="card-header" align="center">
-                            <h1 class="product-name"><%= element.title %></h1>
-                        </header>
-                        <div class="card__image" align="center">
-                            <img src="<%= element.imageURL %>" alt="<%= element.title %>">
-                        </div>
-                        <div class="card__content">
-                            <h2 class="product__price">$<%= element.price %></h2>
-                            <p class="product__desc"><%= element.description %></p>
-                        </div>
-                        <div class="card__actions" align="center">
-                            <form action="/cart" method="POST">
-                                <button class="btn" type="submit">Add to cart</button>
-                                <input type="hidden" name="productId" value="<%= element.id %>">
-                            </form>
-                        </div>
-                    </article>
-                <% }) %>
-            </div>
+        <div class="container">
+            <% prods.forEach(element => { %>
+            <article class="card product-element">
+                <header class="card-header" align="center">
+                    <h1 class="product-name"><%= element.title %></h1>
+                </header>
+                <div class="card__image" align="center">
+                    <img src="<%= element.imageURL %>" alt="<%= element.title %>">
+                </div>
+                <div class="card__content">
+                    <h2 class="product__price">$<%= element.price %></h2>
+                    <p class="product__desc"><%= element.description %></p>
+                </div>
+                <div class="card__actions" align="center">
+                    <% if(isAuthenticated) { %>
+                    <form action="/cart" method="POST">
+                        <button class="btn" type="submit">Add to cart</button>
+                        <input type="hidden" name="productId" value="<%= element.id %>">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    </form>
+                    <% } %>
+                </div>
+            </article>
+            <% }) %>
+        </div>
         <% } else { %>
-            <h1>No products yet!</h1>
+        <h1>No products yet!</h1>
         <% } %>
     </main>
-<%- include('../sharedFiles/end.ejs') %>
+    <%- include('../sharedFiles/end.ejs') %>

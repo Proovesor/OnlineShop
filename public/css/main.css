@@ -23,6 +23,7 @@ main {
     height: 100%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .main-header__list {
@@ -45,7 +46,9 @@ main {
 }
 
 .main-header__item {
-    margin: 10px 20px; 
+    margin: 10px 20px;
+    text-decoration: none;
+    color: hsl(0, 0%, 0%);
 }
 
 .main-header__item a {
@@ -53,11 +56,22 @@ main {
     color: hsl(0, 0%, 0%);
 }
 
+.main-header__item button {
+  font: inherit;
+  background: transparent;
+  border: none;
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+}
+
 .main-header__item a:hover,
 .main-header__item a:active,
-.main-header__item a.active {
-    cursor: pointer;
-    color: #ffffff;
+.main-header__item a.active,
+.main-header__item button:hover, 
+.main-header__item button:active {
+cursor: pointer;
+color: #ffffff;
 }
 
 .btn {

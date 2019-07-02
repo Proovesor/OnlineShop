@@ -1,0 +1,31 @@
+.form-control label,
+.form-control input,
+.form-control textarea {
+    display: block;
+    width: 100%;
+}
+
+.form-control {
+    margin: .5rem 0;
+}
+
+.product-form {
+    width: 25rem;
+    max-width: 90%;
+
+    margin: auto;
+}
+
+.form-control input,
+.form-control textarea {
+    border: 1px solid #414141;
+    border-radius: 2px;
+    padding: 5px;
+
+    font: inherit;
+}
+
+.form-control input:focus,
+.form-control textarea:focus {
+    outline-color: #ce4f4f;
+}

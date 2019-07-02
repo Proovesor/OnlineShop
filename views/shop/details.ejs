@@ -1,9 +1,10 @@
 <%- include('../sharedFiles/head.ejs') %>
 </head>
+
 <body>
     <%- include('../sharedFiles/navigation.ejs') %>
     <main>
-        <article  align="center">
+        <article align="center">
             <header class="card-header">
                 <h1 class="product-name"><%= properties.title %></h1>
                 <hr>
@@ -13,10 +14,13 @@
             </div>
             <h2>$<%= properties.price %></h2>
             <p><%= properties.description %></p>
+            <% if(isAuthenticated) { %>
             <form action="/cart" method="POST">
                 <button class="btn" type="submit">Add to cart</button>
                 <input type="hidden" name="productId" value="<%= properties.id %>">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             </form>
+            <% } %>
         </article>
     </main>
-<%- include('../sharedFiles/end.ejs') %>
+    <%- include('../sharedFiles/end.ejs') %>

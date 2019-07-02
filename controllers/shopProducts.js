@@ -1,5 +1,4 @@
 const Product = require('../models/product');
-const User = require('../models/user');
 const Cart = require('../models/cart');
 
 exports.getIndex = (req, res, next) => {
@@ -10,7 +9,7 @@ exports.getIndex = (req, res, next) => {
                 pageName: 'Shop',
                 prods: products,
                 path: '/',
-                hasProds: products.length > 0,
+                hasProds: products.length > 0
             });
         })
         .catch(err => console.log(err))
@@ -25,27 +24,37 @@ exports.getProducts = (req, res, next) => {
                 prods: products,
                 path: '/products',
                 hasProds: products.length > 0,
+                isAuthenticated: req.session.isLoggedIn
             });
         })
-        .catch(err => console.log(err)); 
+        .catch(err => console.log(err));
 }
 
 exports.getProdById = (req, res, next) => {
     const productId = req.params.productId;
     Product
-        .findAll({where: {id: productId}})
+        .findAll({ where: { id: productId } })
         .then(products => {
             res.render('shop/details', {
                 pageName: 'Product details',
                 properties: products[0],
-                path: '/products'
+                path: '/products',
+                isAuthenticated: req.session.isLoggedIn
             })
         })
-        .catch(err => console.log(err)); 
+        .catch(err => console.log(err));
 }
 
 exports.getCart = (req, res, next) => {
     req.user.getCart()
+        .then(cart => {
+            if (!cart) {
+                return req.user.createCart();
+            }
+            else {
+                return Promise.resolve(cart);
+            }
+        })
         .then(cart => {
             return cart.getProducts()
                 .then(products => {
@@ -53,11 +62,11 @@ exports.getCart = (req, res, next) => {
                         pageName: 'Cart',
                         path: '/cart',
                         prodArray: products,
-                        isNull: products.length
+                        isNull: products.length,
+                        isAuthenticated: req.session.isLoggedIn
                     })
                 })
                 .catch(err => console.log(err))
-            // 
         })
         .catch(err => console.log(err))
 }
@@ -67,32 +76,35 @@ exports.postCart = (req, res, next) => {
     let currentCart;
     let newQuantity = 1;
     req.user.getCart()
-            .then(cart => {
-                currentCart = cart;
-                return cart.getProducts({ where: { id: prodId } })
-            })
-            .then(products => {
-                let product;
-                if(products.length > 0) {
-                    product = products[0];
-                }
-                
-                if(product) {
-                    const oldQuantity = product.cartItem.quantity;
-                    newQuantity = oldQuantity + 1;
-                    return product;
-                }
-                return Product.findByPk(prodId);
-            })
-            .then(product => {
-                return currentCart.addProduct(product, { 
-                    through: { quantity: newQuantity }
-                });
-            })
-            .then(() => {
-                res.redirect('/cart')
-            })
-            .catch(err => console.log(err))
+        .then(cart => {
+            if (!cart) {
+                req.user.createCart();
+            }
+            currentCart = cart;
+            return cart.getProducts({ where: { id: prodId } })
+        })
+        .then(products => {
+            let product;
+            if (products.length > 0) {
+                product = products[0];
+            }
+
+            if (product) {
+                const oldQuantity = product.cartItem.quantity;
+                newQuantity = oldQuantity + 1;
+                return product;
+            }
+            return Product.findByPk(prodId);
+        })
+        .then(product => {
+            return currentCart.addProduct(product, {
+                through: { quantity: newQuantity }
+            });
+        })
+        .then(() => {
+            res.redirect('/cart')
+        })
+        .catch(err => console.log(err))
 }
 
 exports.postDeleteCartProd = (req, res, next) => {
@@ -144,9 +156,9 @@ exports.getOrders = (req, res, next) => {
                 pageName: 'Orders',
                 path: "/orders",
                 hasOrders: orders.length > 0,
-                orders: orders
+                orders: orders,
+                isAuthenticated: req.session.isLoggedIn
             })
         })
         .catch(err => console.log(err))
-    
 }

@@ -1,24 +1,27 @@
 <%- include('../sharedFiles/head.ejs') %>
 </head>
+
 <body>
     <%- include('../sharedFiles/navigation.ejs') %>
     <div align="center">
         <% if(isNull) { %>
         <h1>Items:</h1>
         <% prodArray.forEach(element => { %>
-            <p style="font-size: 25px; margin-bottom: 6px"><%= element.title %>: <%= element.cartItem.quantity %>x</p>
-            <form action="/delete-cart-product" method="POST" style="margin-top: 0; margin-left: 0">
-                <input type="hidden" name="productId" value="<%= element.id %>">
-                <button type="submit" class="btn">Delete</button>
-            </form>
+        <p style="font-size: 25px; margin-bottom: 6px"><%= element.title %>: <%= element.cartItem.quantity %>x</p>
+        <form action="/delete-cart-product" method="POST" style="margin-top: 0; margin-left: 0">
+            <input type="hidden" name="productId" value="<%= element.id %>">
+            <button type="submit" class="btn">Delete</button>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        </form>
         <% }) %>
-            <form action="/create-order" method="POST" style="margin-top: 50px">
-                <input type="hidden" name="smth" value="">
-                <button type="submit" class="btn">Order!</button>
-            </form>
-        
+        <form action="/create-order" method="POST" style="margin-top: 50px">
+            <input type="hidden" name="smth" value="">
+            <button type="submit" class="btn">Order!</button>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        </form>
+
         <% } else { %>
         <h1>Let's start shopping!</h1>
         <% } %>
     </div>
-<%- include('../sharedFiles/end.ejs') %>
+    <%- include('../sharedFiles/end.ejs') %>

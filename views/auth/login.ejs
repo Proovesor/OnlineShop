@@ -1,0 +1,27 @@
+<%- include('../sharedFiles/head.ejs') %>
+<link rel="stylesheet" href="/css/forms.css">
+</link>
+<link rel="stylesheet" href="/css/auth.css">
+</link>
+
+</head>
+
+<body>
+    <%- include('../sharedFiles/navigation.ejs') %>
+
+    <main>
+        <form class="login-form" action="/login" method="POST">
+            <div class="form-control">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email">
+            </div>
+            <div class="form-control">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password">
+            </div>
+            <div class="flash__allert"><%= logError %></div>
+            <button class="btn" type="submit">Login</button>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>"> <!-- the name has to be _csrf -->
+        </form>
+    </main>
+    <%- include('../sharedFiles/end.ejs') %>

@@ -4,7 +4,8 @@ exports.getAddProd = (req, res, next) => {
     res.render('admin/edit-product', {
         pageName: 'Add product',
         path: '/admin/add-product',
-        editing: false
+        editing: false,
+        isAuthenticated: req.session.isLoggedIn
     });
 }
 
@@ -14,25 +15,25 @@ exports.postAddProd = (req, res, next) => {
     const imageURL = req.body.imageURL;
     const price = req.body.price;
     req.user
-        .createProduct({ 
+        .createProduct({
             title: title,
             price: price,
             imageURL: imageURL,
             description: description,
-            userId: req.user.id
+            userId: req.session.user.id
         })
         .then(result => {
             res.redirect('/');
         })
         .catch(err => {
             console.log(err);
-    })
+        })
 }
 
 exports.getEditProd = (req, res, next) => {
     const productId = req.params.productId;
     const editMode = req.query.edit;
-    if(!editMode) {
+    if (!editMode) {
         res.redirect('/');
     }
     req.user.getProducts({
@@ -41,14 +42,15 @@ exports.getEditProd = (req, res, next) => {
         }
     })
         .then(products => {
-            if(!products) {
+            if (!products) {
                 return res.redirect('/admin/products');
             }
             res.render('admin/edit-product', {
                 pageName: 'Edit product',
                 path: '/admin/edit-product',
                 editing: editMode,
-                prod: products[0]
+                prod: products[0],
+                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(err => console.log(err))
@@ -65,12 +67,12 @@ exports.postEditProd = (req, res, next) => {
         price: price,
         imageURL: imageURL,
         description: description
-        },
+    },
         {
-        where: {
-            id: prodId
-        },
-    })
+            where: {
+                id: prodId
+            },
+        })
         .then(result => {
             res.redirect('/products');
         })
@@ -80,12 +82,12 @@ exports.postEditProd = (req, res, next) => {
 exports.getProducts = (req, res, next) => {
     req.user.getProducts()
         .then(products => {
-            console.log(products[0]);
             res.render('admin/product-list', {
                 pageName: 'Admin prods',
                 prods: products,
                 path: '/admin/products',
                 hasProds: products.length > 0,
+                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(err => console.log(err))

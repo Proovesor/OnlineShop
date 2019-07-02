@@ -1,54 +1,24 @@
-.form-control label,
-.form-control input,
-.form-control textarea {
-    display: block;
-    width: 100%;
-}
-
-.form-control {
-    margin: .5rem 0;
-}
-
-.product-form {
-    width: 25rem;
-    max-width: 90%;
-
-    margin: auto;
-}
-
-.form-control input,
-.form-control textarea {
-    border: 1px solid #414141;
-    border-radius: 2px;
-    padding: 5px;
-
-    font: inherit;
-}
-
-.form-control input:focus,
-.form-control textarea:focus {
-    outline-color: #ce4f4f;
-}
-
 #description {
     height: 5rem;
 }
 
-button {
-    font:inherit;
-    padding: 3px;
-    margin: 1rem 0;
-    border: 1px solid #4d068f;
-    border-radius: 5px;
-
-    color: #4d068f;
+.btn {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    display: inline-block;
+    padding: 0.25rem .5rem;
+    text-decoration: none;
+    border: 2px solid #ce4f4f;
+    background-color: azure;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
-button:hover,
-button:active {
+.btn:hover,
+.btn:active {
     cursor: pointer;
-    background-color: #4d068f;
-    color: white;
 
-    border-radius: 5px;
+    background-color: #ce4f4f;
+
+    transition: all 150ms ease-in-out;
 }

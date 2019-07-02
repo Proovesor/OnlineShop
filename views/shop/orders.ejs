@@ -1,21 +1,23 @@
 <%- include('../sharedFiles/head.ejs') %>
 </head>
+
 <body>
     <%- include('../sharedFiles/navigation.ejs') %>
     <div>
         <% if(hasOrders) { %>
+        <ul>
+            <% orders.forEach(order => { %>
+            <h1>#<%= order.id %></h1>
             <ul>
-                <% orders.forEach(order => { %>
-                <h1>#<%= order.id %></h1>
-                <ul>
-                    <% order.products.forEach(element => { %>
-                        <li>Product: <%= element.title %>, quantity: <%= element.orderItem.quantity %>, price: <%= element.orderItem.quantity * element.price %></li>
-                    <% }) %>
-                </ul>
+                <% order.products.forEach(element => { %>
+                <li>Product: <%= element.title %>, quantity: <%= element.orderItem.quantity %>, price:
+                    <%= element.orderItem.quantity * element.price %></li>
                 <% }) %>
             </ul>
+            <% }) %>
+        </ul>
         <% } else { %>
-            <p align="center">No orders yet!</p>
+        <p align="center">No orders yet!</p>
         <% } %>
     </div>
-<%- include('../sharedFiles/end.ejs') %>
+    <%- include('../sharedFiles/end.ejs') %>

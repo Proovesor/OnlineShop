@@ -1,0 +1,14 @@
+.login-form {
+    width: 25rem;
+    max-width: 90%;
+
+    margin: auto;
+}
+
+.flash__allert {
+    color: red;
+    font-family: inherit;
+    font-size: 10px;
+    margin: 5px;
+    text-align: center;
+}
