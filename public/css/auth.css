@@ -5,10 +5,34 @@
     margin: auto;
 }
 
-.flash__allert {
+.flash-red__allert {
     color: red;
     font-family: inherit;
     font-size: 10px;
     margin: 5px;
     text-align: center;
+}
+
+.flash-green__allert {
+    color: green;
+    font-family: inherit;
+    font-size: 10px;
+    margin: 5px;
+    text-align: center;
+}
+
+.reset {
+    text-decoration: underline;
+    text-align: center;
+    opacity: 0.8;
+}
+
+.reset a {
+    color: blue;
+}
+
+.reset:hover {
+    opacity: 1;
+    transition: ease-in-out;
+    transition-duration: 0.2s;
 }

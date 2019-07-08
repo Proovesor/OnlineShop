@@ -36,7 +36,7 @@ exports.getEditProd = (req, res, next) => {
     if (!editMode) {
         res.redirect('/');
     }
-    req.user.getProducts({
+    Product.findOne({
         where: {
             id: productId
         }
@@ -49,7 +49,7 @@ exports.getEditProd = (req, res, next) => {
                 pageName: 'Edit product',
                 path: '/admin/edit-product',
                 editing: editMode,
-                prod: products[0],
+                prod: products,
                 isAuthenticated: req.session.isLoggedIn
             });
         })
@@ -62,25 +62,27 @@ exports.postEditProd = (req, res, next) => {
     const imageURL = req.body.imageURL;
     const price = req.body.price;
     const prodId = req.body.productId;
-    Product.update({
-        title: title,
-        price: price,
-        imageURL: imageURL,
-        description: description
-    },
-        {
-            where: {
-                id: prodId
-            },
-        })
-        .then(result => {
-            res.redirect('/products');
+
+    Product.findOne({ where: { id: prodId } })
+        .then(product => {
+            if (product.userId.toString() !== req.user._id.toString()) {
+                return res.redirect('/');
+            }
+
+            product.title = title;
+            product.price = price;
+            product.imageURL = imageURL;
+            product.description = description;
+            return product.save()
+                .then(result => {
+                    res.redirect('/products');
+                })
         })
         .catch(err => console.log(err))
 }
 
 exports.getProducts = (req, res, next) => {
-    req.user.getProducts()
+    Product.findAll({ where: { userId: req.user._id } })
         .then(products => {
             res.render('admin/product-list', {
                 pageName: 'Admin prods',
@@ -97,10 +99,13 @@ exports.postDeleteProd = (req, res, next) => {
     const prodId = req.body.productId;
     Product.destroy({
         where: {
-            id: prodId
+            id: prodId,
+            userId: req.user._id
         }
     })
-        .then(res.redirect('/products'))
+        .then(result => {
+            res.redirect('/products');
+        })
         .catch(err => console.log(err))
 }
 

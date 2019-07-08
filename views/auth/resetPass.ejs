@@ -10,22 +10,14 @@
     <%- include('../sharedFiles/navigation.ejs') %>
 
     <main>
-        <div class="flash-green__allert"><%= successfulChange %></div>
-        <form class="login-form" action="/login" method="POST">
+        <form class="login-form" action="/reset" method="POST">
             <div class="form-control">
                 <label for="email">Email</label>
                 <input type="email" name="email" id="email">
             </div>
-            <div class="form-control">
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password">
-            </div>
-            <div class="flash-red__allert"><%= logError %></div>
-            <button class="btn" type="submit">Login</button>
+            <div class="flash-red__allert"><%= resetError %></div>
+            <button class="btn" type="submit">Reset Password</button>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         </form>
-        <div class="reset">
-            <a href="/reset">Reset Password</a>
-        </div>
     </main>
     <%- include('../sharedFiles/end.ejs') %>

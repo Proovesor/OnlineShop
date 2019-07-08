@@ -6,7 +6,7 @@
 <body>
     <%- include('../sharedFiles/navigation.ejs') %>
     <main>
-        <form class="login-form" action="/signup" method="POST">
+        <form class="login-form" action="/signup" method="POST" novalidate>
             <div class="form-control">
                 <label for="email">E-Mail</label>
                 <input type="email" name="email" id="email">
@@ -19,13 +19,12 @@
                 <label for="confirmPassword">Confirm Password</label>
                 <input type="password" name="confirmPassword" id="confirmPassword">
             </div>
-            <div class="flash__allert"><%= userError %>
+            <% if(signupError) { %>
+            <div class="flash-red__allert"><%= signupError %>
             </div>
-            <div class="flash__allert"><%= emailError %>
+            <% } %>
+            <div class="flash-red__allert"><%= userError %>
             </div>
-            <div class="flash__allert"><%= passError %>
-            </div>
-            <div class="flash__allert"><%= passMatchError %></div>
             <button class="btn" type="submit">Signup</button>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         </form>

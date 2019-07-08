@@ -1,0 +1,30 @@
+<%- include('../sharedFiles/head.ejs') %>
+<link rel="stylesheet" href="/css/forms.css">
+</link>
+<link rel="stylesheet" href="/css/auth.css">
+</link>
+
+</head>
+
+<body>
+    <%- include('../sharedFiles/navigation.ejs') %>
+
+    <main>
+        <form class="login-form" action="/new-pass" method="POST">
+            <div class="form-control">
+                <label for="password">New Password</label>
+                <input type="password" name="password" id="password">
+            </div>
+            <div class="form-control">
+                <label for="password">Confirm Password</label>
+                <input type="password" name="confirmPassword" id="confirmPassword">
+            </div>
+            <div class="flash-red__allert"><%= passError %></div>
+            <div class="flash-red__allert"><%= passMatchError %></div>
+            <button class="btn" type="submit">Reset</button>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <input type="hidden" name="userId" value="<%= userId %>">
+            <input type="hidden" name="resetToken" value="<%= resetToken %>">
+        </form>
+    </main>
+    <%- include('../sharedFiles/end.ejs') %>
