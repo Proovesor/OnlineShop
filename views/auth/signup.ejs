@@ -9,22 +9,24 @@
         <form class="login-form" action="/signup" method="POST" novalidate>
             <div class="form-control">
                 <label for="email">E-Mail</label>
-                <input type="email" name="email" id="email">
+                <input type="email" name="email" id="email" value="<%= userInput.email %>"
+                    style="<% if(errorField === 'email') { %>border: 2px solid red<% } %>">
             </div>
             <div class="form-control">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password">
+                <input type="password" name="password" id="password" value="<%= userInput.password %>"
+                    style="<% if(errorField === 'password') { %>border: 2px solid red<% } %>">
             </div>
             <div class="form-control">
                 <label for="confirmPassword">Confirm Password</label>
-                <input type="password" name="confirmPassword" id="confirmPassword">
+                <input type="password" name="confirmPassword" id="confirmPassword"
+                    value="<%= userInput.confirmPassword %>"
+                    style="<% if(errorField === 'confirmPassword') { %>border: 2px solid red<% } %>">
             </div>
             <% if(signupError) { %>
             <div class="flash-red__allert"><%= signupError %>
             </div>
             <% } %>
-            <div class="flash-red__allert"><%= userError %>
-            </div>
             <button class="btn" type="submit">Signup</button>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         </form>
