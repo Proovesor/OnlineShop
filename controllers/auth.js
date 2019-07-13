@@ -26,7 +26,6 @@ exports.getLogin = (req, res, next) => {
         path: '/login',
         logError: null,
         successfulChange: req.flash('successfulChange'),
-        errorField: null,
         userInput: { email: '', password: '' }
     })
 }
@@ -46,7 +45,6 @@ exports.postLogin = (req, res, next) => {
             path: '/login',
             logError: errors.array()[0].msg,
             successfulChange: req.flash('successfulChange'),
-            errorField: errors.array()[0].param,
             userInput: { email: email, password: password }
         })
     }

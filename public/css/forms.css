@@ -29,3 +29,19 @@
 .form-control textarea:focus {
     outline-color: #ce4f4f;
 }
+
+.flash-red__allert {
+    color: red;
+    font-family: inherit;
+    font-size: 12px;
+    margin: 5px;
+    text-align: center;
+}
+
+.flash-green__allert {
+    color: green;
+    font-family: inherit;
+    font-size: 12px;
+    margin: 5px;
+    text-align: center;
+}

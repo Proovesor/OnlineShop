@@ -4,3 +4,4 @@ test.js
 .DS_Store
 .vscode
 .eslintrc.json
+package-lock.json

@@ -15,24 +15,33 @@
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <div class="form-control">
                 <label for="title">Title</label>
-                <input type="text" name="title" id="title" value="<% if(editing) { %><%= prod.title %><% } %>">
+                <input type="text" name="title" id="title"
+                    value="<% if(editing) { %><%= prod.title %><% } else { %><%= userInput.title %><% } %>"
+                    style="<% if(errorField === 'title') { %>border: 2px solid red<% } %>">
             </div>
             <div class="form-control">
                 <label for="imageURL">imageURL</label>
-                <input type="text" name="imageURL" id="imageURL" value="<% if(editing) { %><%= prod.imageURL %><% } %>">
+                <input type="text" name="imageURL" id="imageURL"
+                    value="<% if(editing) { %><%= prod.imageURL %><% } else { %><%= userInput.imageURL %><% } %>%>"
+                    style="<% if(errorField === 'imageURL') { %>border: 2px solid red<% } %>">
             </div>
             <div class="form-control">
                 <label for="price">Price</label>
                 <input type="number" name="price" id="price" step="0.01"
-                    value="<% if(editing) { %><%= prod.price %><% } %>">
+                    value="<% if(editing) { %><%= prod.price %><% } else { %><%= userInput.price %><% } %>%>"
+                    style="<% if(errorField === 'price') { %>border: 2px solid red<% } %>">
             </div>
             <div class="form-control">
                 <label for="description">Description</label>
-                <textarea name="description"
-                    id="description"><% if(editing) { %><%= prod.description %><% } %></textarea>
+                <textarea name="description" id="description"
+                    style="<% if(errorField === 'description') { %>border: 2px solid red<% } %>"><% if(editing) { %><%= prod.description %><% } else { %><%= userInput.description %><% } %>%></textarea>
             </div>
             <% if(editing) { %>
             <input type="hidden" name="productId" value="<%= prod.id %>">
+            <% } %>
+            <% if(addError) { %>
+            <div class="flash-red__allert"><%= addError %>
+            </div>
             <% } %>
             <button class="btn" type="submit"><% if(!editing) { %>Add product<% } else { %>Edit<% } %></button>
         </form>

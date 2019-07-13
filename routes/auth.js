@@ -17,13 +17,14 @@ router.post('/login', [
             return User.findOne({ where: { email: value } })
                 .then(user => {
                     if (!user) {
-                        return Promise.reject('Such user does not exist.')
+                        return Promise.reject('Invalid email or passowrd.')
                     }
                 })
-        }),
-    body('password', 'Incorrect password. Remember that it must be at least 7 characters long.')
+        })
+        .normalizeEmail(),
+    body('password', 'Invalid email or password.')
         .trim()
-        .isLength({ min: 7 })
+        .isLength({ min: 5 })
         .custom((value, { req }) => {
             return User.findOne({ where: { email: req.body.email } })
                 .then(user => {
@@ -31,7 +32,7 @@ router.post('/login', [
                 })
                 .then(result => {
                     if (!result) {
-                        return Promise.reject('Entered password is incorrect.')
+                        return Promise.reject('Invalid email or password.')
                     }
                 })
         })
@@ -52,9 +53,14 @@ router.post('/signup', [check('email')
                     return Promise.reject('Such user already exists!')
                 }
             })
-    }),
-body('password', 'You entered invalid password. It must contain at least 7 characters.').trim().isLength({ min: 7 }),
-body('confirmPassword', 'Passwords must match.').trim().custom((value, { req }) => value === req.body.password)],
+    })
+    .normalizeEmail(),
+body('password', 'You entered invalid password. It must contain at least 7 characters.')
+    .trim()
+    .isLength({ min: 5 }),
+body('confirmPassword', 'Passwords must match.')
+    .trim()
+    .custom((value, { req }) => value === req.body.password)],
     authControllers.postSignup);
 
 router.get('/reset', authControllers.getResetPass);

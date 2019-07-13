@@ -14,13 +14,11 @@
         <form class="login-form" action="/login" method="POST" novalidate>
             <div class="form-control">
                 <label for="email">Email</label>
-                <input type="email" name="email" id="email" value="<%= userInput.email %>"
-                    style="<% if(errorField === 'email') { %>border: 2px solid red<% } %>">
+                <input type="email" name="email" id="email" value="<%= userInput.email %>">
             </div>
             <div class="form-control">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" value="<%= userInput.password %>"
-                    style="<% if(errorField === 'password') { %>border: 2px solid red<% } %>">
+                <input type="password" name="password" id="password" value="<%= userInput.password %>">
             </div>
             <% if(logError) { %>
             <div class="flash-red__allert"><%= logError %></div>

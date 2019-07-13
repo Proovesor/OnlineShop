@@ -1,11 +1,15 @@
 const Product = require('../models/product');
 
+const { validationResult } = require('express-validator/check');
+
 exports.getAddProd = (req, res, next) => {
     res.render('admin/edit-product', {
         pageName: 'Add product',
         path: '/admin/add-product',
         editing: false,
-        isAuthenticated: req.session.isLoggedIn
+        addError: null,
+        errorField: null,
+        userInput: { title: '', description: '', imageURL: '', price: '' }
     });
 }
 
@@ -14,6 +18,25 @@ exports.postAddProd = (req, res, next) => {
     const description = req.body.description;
     const imageURL = req.body.imageURL;
     const price = req.body.price;
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.render('admin/edit-product', {
+            pageName: 'Add product',
+            path: '/admin/add-product',
+            editing: false,
+            addError: errors.array()[0].msg,
+            errorField: errors.array()[0].param,
+            userInput: {
+                title: title,
+                description: description,
+                imageURL: imageURL,
+                price: price
+            }
+        });
+    }
+
     req.user
         .createProduct({
             title: title,
@@ -50,7 +73,8 @@ exports.getEditProd = (req, res, next) => {
                 path: '/admin/edit-product',
                 editing: editMode,
                 prod: products,
-                isAuthenticated: req.session.isLoggedIn
+                addError: null,
+                errorField: null
             });
         })
         .catch(err => console.log(err))
@@ -62,6 +86,25 @@ exports.postEditProd = (req, res, next) => {
     const imageURL = req.body.imageURL;
     const price = req.body.price;
     const prodId = req.body.productId;
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.render('admin/edit-product', {
+            pageName: 'Edit product',
+            path: '/admin/edit-product',
+            editing: true,
+            prod: {
+                id: prodId,
+                title: title,
+                description: description,
+                imageURL: imageURL,
+                price: price
+            },
+            addError: errors.array()[0].msg,
+            errorField: errors.array()[0].param,
+        });
+    }
 
     Product.findOne({ where: { id: prodId } })
         .then(product => {
@@ -88,8 +131,7 @@ exports.getProducts = (req, res, next) => {
                 pageName: 'Admin prods',
                 prods: products,
                 path: '/admin/products',
-                hasProds: products.length > 0,
-                isAuthenticated: req.session.isLoggedIn
+                hasProds: products.length > 0
             });
         })
         .catch(err => console.log(err))
