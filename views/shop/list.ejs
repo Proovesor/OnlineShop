@@ -34,6 +34,10 @@
             </article>
             <% }) %>
         </div>
+        <section class="pagination">
+            <a class="<%= notFirst ? 'pag__active' : 'pag__not-active' %>" href="/products?page=<%= page-1 %>">Prev</a>
+            <a class="<%= notLast ? 'pag__active' : 'pag__not-active' %>" href="/products?page=<%= page+1 %>">Next</a>
+        </section>
         <% } else { %>
         <h1>No products yet!</h1>
         <% } %>

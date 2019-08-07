@@ -50,3 +50,36 @@
     width: 100%;
 }
 
+.pagination {
+    text-align: center;
+}
+
+.pag__active {
+    text-decoration: none;
+    background-color: azure;
+    border: solid 2px #ce4f4f;
+    border-radius: 5px;
+    
+    margin: 1rem;
+    padding: 0.3rem 1rem;
+}
+
+.pag__active:hover {
+    background-color: #ce4f4f;
+}
+
+.pag__not-active {
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none;
+    
+    background-color: azure;
+    border: solid 2px #000000;
+    border-radius: 5px;
+
+    margin: 1rem;
+    padding: 0.3rem 1rem;
+
+    opacity: .5;
+  }
+
