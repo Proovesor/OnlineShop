@@ -3,194 +3,187 @@ const Cart = require("../models/cart");
 
 const ITEMS_PER_PAGE = 2;
 
-exports.getIndex = (req, res, next) => {
+exports.getIndex = async (req, res, next) => {
   let currentPage = Number(req.query.page);
   if (!currentPage || currentPage < 1) {
     currentPage = 1;
   }
   let totalItems;
 
-  Product.findAndCountAll({
-    offset: (currentPage - 1) * ITEMS_PER_PAGE,
-    limit: ITEMS_PER_PAGE
-  })
-    .then(result => {
-      totalItems = result.count;
-      res.render("shop/index", {
-        pageName: "Shop",
-        prods: result.rows,
-        path: "/",
-        hasProds: result.rows.length > 0,
-        notFirst: currentPage > 1,
-        notLast: currentPage < totalItems / ITEMS_PER_PAGE,
-        page: currentPage
-      });
-    })
-    .catch(err => console.log(err));
+  try {
+    const products = await Product.findAndCountAll({
+      offset: (currentPage - 1) * ITEMS_PER_PAGE,
+      limit: ITEMS_PER_PAGE
+    });
+
+    totalItems = products.count;
+    res.render("shop/index", {
+      pageName: "Shop",
+      prods: products.rows,
+      path: "/",
+      hasProds: products.rows.length > 0,
+      notFirst: currentPage > 1,
+      notLast: currentPage < totalItems / ITEMS_PER_PAGE,
+      page: currentPage
+    });
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-exports.getProducts = (req, res, next) => {
+exports.getProducts = async (req, res, next) => {
   let currentPage = Number(req.query.page);
   if (!currentPage || currentPage < 1) {
     currentPage = 1;
   }
   let totalItems;
 
-  Product.findAndCountAll({
-    offset: (currentPage - 1) * ITEMS_PER_PAGE,
-    limit: ITEMS_PER_PAGE
-  })
-    .then(result => {
-      totalItems = result.count;
-      res.render("shop/list", {
-        pageName: "Products",
-        prods: result.rows,
-        path: "/products",
-        hasProds: result.rows.length > 0,
-        notFirst: currentPage > 1,
-        notLast: currentPage < totalItems / ITEMS_PER_PAGE,
-        page: currentPage
-      });
-    })
-    .catch(err => console.log(err));
+  try {
+    const products = await Product.findAndCountAll({
+      offset: (currentPage - 1) * ITEMS_PER_PAGE,
+      limit: ITEMS_PER_PAGE
+    });
+
+    totalItems = products.count;
+    res.render("shop/list", {
+      pageName: "Products",
+      prods: products.rows,
+      path: "/products",
+      hasProds: products.rows.length > 0,
+      notFirst: currentPage > 1,
+      notLast: currentPage < totalItems / ITEMS_PER_PAGE,
+      page: currentPage
+    });
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-exports.getProdById = (req, res, next) => {
+exports.getProdById = async (req, res, next) => {
   const productId = req.params.productId;
-  Product.findAll({ where: { id: productId } })
-    .then(products => {
-      res.render("shop/details", {
-        pageName: "Product details",
-        properties: products[0],
-        path: "/products",
-        isAuthenticated: req.session.isLoggedIn
-      });
-    })
-    .catch(err => console.log(err));
+
+  try {
+    const products = await Product.findAll({ where: { id: productId } });
+    return res.render("shop/details", {
+      pageName: "Product details",
+      properties: products[0],
+      path: "/products",
+      isAuthenticated: req.session.isLoggedIn
+    });
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-exports.getCart = (req, res, next) => {
-  req.user
-    .getCart()
-    .then(cart => {
-      if (!cart) {
-        return req.user.createCart();
-      } else {
-        return Promise.resolve(cart);
-      }
-    })
-    .then(cart => {
-      return cart
-        .getProducts()
-        .then(products => {
-          res.render("shop/cart", {
-            pageName: "Cart",
-            path: "/cart",
-            prodArray: products,
-            isNull: products.length,
-            isAuthenticated: req.session.isLoggedIn
-          });
-        })
-        .catch(err => console.log(err));
-    })
-    .catch(err => console.log(err));
+exports.getCart = async (req, res, next) => {
+  try {
+    const cart = await req.user.getCart();
+    if (!cart) {
+      await req.user.createCart();
+    }
+
+    const products = await cart.getProducts();
+
+    return res.render("shop/cart", {
+      pageName: "Cart",
+      path: "/cart",
+      prodArray: products,
+      isNull: products.length,
+      isAuthenticated: req.session.isLoggedIn
+    });
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-exports.postCart = (req, res, next) => {
+exports.postCart = async (req, res, next) => {
   const prodId = req.body.productId;
-  let currentCart;
+  let currentCart, product;
   let newQuantity = 1;
-  req.user
-    .getCart()
-    .then(cart => {
-      if (!cart) {
-        req.user.createCart();
-      }
-      currentCart = cart;
-      return cart.getProducts({ where: { id: prodId } });
-    })
-    .then(products => {
-      let product;
-      if (products.length > 0) {
-        product = products[0];
-      }
 
-      if (product) {
-        const oldQuantity = product.cartItem.quantity;
-        newQuantity = oldQuantity + 1;
-        return product;
-      }
-      return Product.findByPk(prodId);
-    })
-    .then(product => {
-      return currentCart.addProduct(product, {
-        through: { quantity: newQuantity }
-      });
-    })
-    .then(() => {
-      res.redirect("/cart");
-    })
-    .catch(err => console.log(err));
+  try {
+    const cart = await req.user.getCart();
+
+    if (!cart) {
+      await req.user.createCart();
+    }
+    currentCart = cart;
+
+    const products = await cart.getProducts({ where: { id: prodId } });
+    if (products.length > 0) {
+      product = products[0];
+    }
+
+    if (product) {
+      const oldQuantity = product.cartItem.quantity;
+      newQuantity = oldQuantity + 1;
+    } else {
+      product = await Product.findByPk(prodId);
+    }
+
+    await currentCart.addProduct(product, {
+      through: { quantity: newQuantity }
+    });
+
+    return res.redirect("cart");
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-exports.postDeleteCartProd = (req, res, next) => {
+exports.postDeleteCartProd = async (req, res, next) => {
   const prodId = req.body.productId;
-  req.user
-    .getCart()
-    .then(cart => {
-      return cart.getProducts({ where: { id: prodId } });
-    })
-    .then(products => {
-      const product = products[0];
-      return product.cartItem.destroy();
-    })
-    .then(() => {
-      res.redirect("/cart");
-    })
-    .catch(err => console.log(err));
+
+  try {
+    const cart = await req.user.getCart();
+
+    const products = await cart.getProducts({ where: { id: prodId } });
+
+    const product = products[0];
+
+    await product.cartItem.destroy();
+
+    return res.redirect("cart");
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-exports.postOrder = (req, res, next) => {
-  let currentCart;
-  let cartProds;
-  req.user
-    .getCart()
-    .then(cart => {
-      currentCart = cart;
-      return cart.getProducts();
-    })
-    .then(products => {
-      cartProds = products;
-      return req.user
-        .createOrder()
-        .then(order => {
-          return order.addProducts(
-            products.map(product => {
-              product.orderItem = { quantity: product.cartItem.quantity };
-              return product;
-            })
-          );
-        })
-        .catch(err => console.log(err));
-    })
-    .then(result => {
-      currentCart.removeProducts(cartProds);
-      res.redirect("/orders");
-    })
-    .catch(err => console.log(err));
+exports.postOrder = async (req, res, next) => {
+  try {
+    const cart = await req.user.getCart();
+
+    const products = await cart.getProducts();
+
+    cartProds = products;
+
+    const order = await req.user.createOrder();
+    await order.addProducts(
+      products.map(prod => {
+        prod.orderItem = { quantity: prod.cartItem.quantity };
+        return prod;
+      })
+    );
+
+    await cart.removeProducts(products);
+    return res.redirect("/orders");
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-exports.getOrders = (req, res, next) => {
-  req.user
-    .getOrders({ include: ["products"] })
-    .then(orders => {
-      res.render("shop/orders", {
-        pageName: "Orders",
-        path: "/orders",
-        hasOrders: orders.length > 0,
-        orders: orders,
-        isAuthenticated: req.session.isLoggedIn
-      });
-    })
-    .catch(err => console.log(err));
+exports.getOrders = async (req, res, next) => {
+  try {
+    const orders = await req.user.getOrders({ include: ["products"] });
+    console.log(orders);
+    return res.render("shop/orders", {
+      pageName: "Orders",
+      path: "/orders",
+      hasOrders: orders.length > 0,
+      orders: orders,
+      isAuthenticated: req.session.isLoggedIn
+    });
+  } catch (e) {
+    console.log(e);
+  }
 };
